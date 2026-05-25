@@ -2,12 +2,17 @@ package com.historias_de_cafe.backend.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-
-import java.math.BigDecimal;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "products")
@@ -18,31 +23,38 @@ public class Product {
     @Column(name = "id_product")
     private Long id;
 
+    @NotBlank(message = "El nombre del producto no puede estar vacío")
+    @Size(max = 100, message = "El nombre es demasiado largo")
     @Column(nullable = false)
     private String name;
 
     @Column
     private String description;
 
+    @NotNull(message = "El precio es obligatorio")
+    @Min(value = 0, message = "El precio no puede ser negativo")
     @Column(nullable = false)
-    private BigDecimal price;
+    private Double price;
 
+    @NotNull(message = "El stock es obligatorio")
+    @Min(value = 0, message = "El stock no puede ser negativo")
     @Column(nullable = false)
     private Integer stock;
 
-    @Column(name = "categorie_id")
-    private Long categorieId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categorie_id", nullable = false)
+    private Categories categories;
 
     public Product() {
     }
 
-    public Product(Long id, String name, String description, BigDecimal price, Integer stock, Long categorieId) {
+    public Product(Long id, String name, String description, Double price, Integer stock, Categories categories) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
-        this.categorieId = categorieId;
+        this.categories = categories;
     }
 
     public Long getId() {
@@ -69,11 +81,11 @@ public class Product {
         this.description = description;
     }
 
-    public BigDecimal getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
@@ -85,11 +97,11 @@ public class Product {
         this.stock = stock;
     }
 
-    public Long getCategorieId() {
-        return categorieId;
+    public Categories getCategories() {
+        return categories;
     }
 
-    public void setCategorieId(Long categorieId) {
-        this.categorieId = categorieId;
+    public void setCategories(Categories categories) {
+        this.categories = categories;
     }
 }

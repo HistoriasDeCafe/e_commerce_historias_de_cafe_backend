@@ -131,7 +131,7 @@ public class PaymentService {
     }
 
     private PreferenceItemRequest toPreferenceItemRequest(OrderDetail detail) {
-        BigDecimal unitPrice = detail.getProduct().getPrice();
+        BigDecimal unitPrice = BigDecimal.valueOf(detail.getProduct().getPrice());
 
         return PreferenceItemRequest.builder()
                 .title(detail.getProduct().getName())

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -52,10 +53,21 @@ public class UserService {
         return userRepository.save(existingUser);
     }
 
+    public User patch(Long id, Map<String, Object> fields) {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
+        if (fields.containsKey("name")) existingUser.setName((String) fields.get("name"));
+        if (fields.containsKey("email")) existingUser.setEmail((String) fields.get("email"));
+        if (fields.containsKey("passwordHash")) existingUser.setPasswordHash((String) fields.get("passwordHash"));
+        if (fields.containsKey("stateActive")) existingUser.setStateActive((Boolean) fields.get("stateActive"));
+
+        return userRepository.save(existingUser);
+    }
+
     public void delete(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
         userRepository.delete(user);
     }
-
 }

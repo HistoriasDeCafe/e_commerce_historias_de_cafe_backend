@@ -1,8 +1,10 @@
 package com.historias_de_cafe.backend.service;
 
-import com.historias_de_cafe.backend.DTO.ProductRequestDto;
-import com.historias_de_cafe.backend.DTO.ProductResponseDto;
+import com.historias_de_cafe.backend.DTO.ProductRequestDTO;
+import com.historias_de_cafe.backend.DTO.ProductResponseDTO;
+import com.historias_de_cafe.backend.model.Categories;
 import com.historias_de_cafe.backend.model.Product;
+import com.historias_de_cafe.backend.repository.CategoriesRepository;
 import com.historias_de_cafe.backend.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,50 +16,53 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoriesRepository categoriesRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoriesRepository categoriesRepository) {
         this.productRepository = productRepository;
+        this.categoriesRepository = categoriesRepository;
     }
 
-    public ProductResponseDto create(ProductRequestDto dto) {
-        validate(dto);
+    public ProductResponseDTO create(ProductRequestDTO dto) {
+        Categories category = categoriesRepository.findById(dto.getCategoryId().intValue())
+                .orElseThrow(() -> new RuntimeException("Category not found with id: " + dto.getCategoryId()));
 
         Product product = new Product();
-        product.setName(dto.name());
-        product.setDescription(dto.description());
-        product.setPrice(dto.price());
-        product.setStock(dto.stock());
-        product.setCategorieId(dto.categorieId());
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setPrice(dto.getPrice());
+        product.setStock(dto.getStock());
+        product.setCategories(category);
 
         return toResponseDto(productRepository.save(product));
     }
 
     @Transactional(readOnly = true)
-    public ProductResponseDto getById(Long id) {
+    public ProductResponseDTO getById(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
         return toResponseDto(product);
     }
 
     @Transactional(readOnly = true)
-    public List<ProductResponseDto> getAll() {
+    public List<ProductResponseDTO> getAll() {
         return productRepository.findAll()
                 .stream()
                 .map(this::toResponseDto)
                 .toList();
     }
 
-    public ProductResponseDto update(Long id, ProductRequestDto dto) {
-        validate(dto);
-
+    public ProductResponseDTO update(Long id, ProductRequestDTO dto) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+        Categories category = categoriesRepository.findById(dto.getCategoryId().intValue())
+                .orElseThrow(() -> new RuntimeException("Category not found with id: " + dto.getCategoryId()));
 
-        product.setName(dto.name());
-        product.setDescription(dto.description());
-        product.setPrice(dto.price());
-        product.setStock(dto.stock());
-        product.setCategorieId(dto.categorieId());
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setPrice(dto.getPrice());
+        product.setStock(dto.getStock());
+        product.setCategories(category);
 
         return toResponseDto(productRepository.save(product));
     }
@@ -68,28 +73,16 @@ public class ProductService {
         productRepository.delete(product);
     }
 
-    private void validate(ProductRequestDto dto) {
-        if (dto.name() == null || dto.name().isBlank()) {
-            throw new RuntimeException("Product name is required");
-        }
-
-        if (dto.price() == null || dto.price().signum() <= 0) {
-            throw new RuntimeException("Product price must be greater than 0");
-        }
-
-        if (dto.stock() == null || dto.stock() < 0) {
-            throw new RuntimeException("Product stock must be greater than or equal to 0");
-        }
-    }
-
-    private ProductResponseDto toResponseDto(Product product) {
-        return new ProductResponseDto(
+    private ProductResponseDTO toResponseDto(Product product) {
+        Categories category = product.getCategories();
+        return new ProductResponseDTO(
                 product.getId(),
                 product.getName(),
                 product.getDescription(),
                 product.getPrice(),
                 product.getStock(),
-                product.getCategorieId()
+                category != null ? category.getId().longValue() : null,
+                category != null ? category.getPresentation() : null
         );
     }
 }

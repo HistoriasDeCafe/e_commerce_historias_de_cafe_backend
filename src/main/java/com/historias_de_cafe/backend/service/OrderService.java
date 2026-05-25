@@ -18,12 +18,14 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
 public class OrderService {
 
-    private static final String ORDER_STATUS_IN_PROCESS = "En proceso";
+    private static final String DEFAULT_STATE = "En proceso";
+    private static final Set<String> ALLOWED_STATES = Set.of("En proceso", "Pendiente Entrega", "Entregado", "Cancelado");
 
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
@@ -47,7 +49,7 @@ public class OrderService {
 
         Order order = new Order();
         order.setUser(user);
-        order.setStateOrder(dto.stateOrder() != null ? dto.stateOrder() : ORDER_STATUS_IN_PROCESS);
+        order.setStateOrder(normalizeState(dto.stateOrder()));
         order.setOrderDate(LocalDateTime.now());
 
         List<OrderDetail> details = new ArrayList<>();
@@ -65,7 +67,7 @@ public class OrderService {
                 throw new RuntimeException("Not enough stock for product id: " + item.productId());
             }
 
-            BigDecimal lineTotal = product.getPrice().multiply(BigDecimal.valueOf(item.quantityProducts()));
+            BigDecimal lineTotal = BigDecimal.valueOf(product.getPrice()).multiply(BigDecimal.valueOf(item.quantityProducts()));
             subtotal = subtotal.add(lineTotal);
             product.setStock(product.getStock() - item.quantityProducts());
 
@@ -104,7 +106,7 @@ public class OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
 
-        order.setStateOrder(state);
+        order.setStateOrder(normalizeState(state));
         return toResponseDto(orderRepository.save(order));
     }
 
@@ -133,5 +135,21 @@ public class OrderService {
                 order.getOrderDate(),
                 detailDtos
         );
+    }
+
+    private String normalizeState(String state) {
+        if (state == null || state.isBlank()) {
+            return DEFAULT_STATE;
+        }
+
+        if ("PENDING".equalsIgnoreCase(state)) {
+            return DEFAULT_STATE;
+        }
+
+        if (!ALLOWED_STATES.contains(state)) {
+            throw new RuntimeException("Invalid order state. Allowed values: " + ALLOWED_STATES);
+        }
+
+        return state;
     }
 }
