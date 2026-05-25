@@ -1,6 +1,5 @@
 package com.historias_de_cafe.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -12,6 +11,7 @@ import jakarta.validation.constraints.Size;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_product")
     private Long id;
 
     @NotBlank(message = "El nombre del producto no puede estar vacío")
@@ -37,7 +37,7 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "categorie_id", nullable = false)
-    private Categorie categorie;
+    private Categories categories;
 
     public Product() {
     }
