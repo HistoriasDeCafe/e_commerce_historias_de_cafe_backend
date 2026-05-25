@@ -4,10 +4,13 @@ import com.historias_de_cafe.backend.model.User;
 import com.historias_de_cafe.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
@@ -21,5 +24,38 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public User create(User user) {
+        user.setId(null);
+        user.setCreationDate(LocalDateTime.now());
+        if (user.getStateActive() == null) {
+            user.setStateActive(true);
+        }
+        return userRepository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    public User getById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+    }
+
+    public User update(Long id, User user) {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
+        existingUser.setName(user.getName());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setPasswordHash(user.getPasswordHash());
+        existingUser.setRole(user.getRole());
+        existingUser.setStateActive(user.getStateActive());
+
+        return userRepository.save(existingUser);
+    }
+
+    public void delete(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+        userRepository.delete(user);
+    }
 
 }

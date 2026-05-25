@@ -6,8 +6,10 @@ import com.historias_de_cafe.backend.DTO.OrderRequestDto;
 import com.historias_de_cafe.backend.DTO.OrderResponseDto;
 import com.historias_de_cafe.backend.model.Order;
 import com.historias_de_cafe.backend.model.OrderDetail;
+import com.historias_de_cafe.backend.model.Product;
 import com.historias_de_cafe.backend.model.User;
 import com.historias_de_cafe.backend.repository.OrderRepository;
+import com.historias_de_cafe.backend.repository.ProductRepository;
 import com.historias_de_cafe.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,8 @@ import java.util.List;
 @Service
 @Transactional
 public class OrderService {
+
+    private static final String ORDER_STATUS_IN_PROCESS = "En proceso";
 
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
@@ -43,7 +47,7 @@ public class OrderService {
 
         Order order = new Order();
         order.setUser(user);
-        order.setStateOrder(dto.stateOrder() != null ? dto.stateOrder() : "PENDING");
+        order.setStateOrder(dto.stateOrder() != null ? dto.stateOrder() : ORDER_STATUS_IN_PROCESS);
         order.setOrderDate(LocalDateTime.now());
 
         List<OrderDetail> details = new ArrayList<>();
