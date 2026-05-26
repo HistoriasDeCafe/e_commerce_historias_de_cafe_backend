@@ -23,6 +23,8 @@ public class ProductRequestDTO {
     @NotNull(message = "El ID de la categoría es obligatorio")
     private Long categoryId;
 
+    private String imagen;
+
     public ProductRequestDTO() {
     }
 
@@ -64,5 +66,13 @@ public class ProductRequestDTO {
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 }
