@@ -9,8 +9,10 @@ public class ProductResponseDTO {
     private Integer stock;
     private Long categoryId;
     private String categoryName;
+    private String imagen;
 
-    public ProductResponseDTO(Long idProduct, String name, String description, Double price, Integer stock, Long categoryId, String categoryName) {
+
+    public ProductResponseDTO(Long idProduct, String name, String description, Double price, Integer stock, Long categoryId, String categoryName, String imagen) {
         this.idProduct = idProduct;
         this.name = name;
         this.description = description;
@@ -18,6 +20,7 @@ public class ProductResponseDTO {
         this.stock = stock;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
+        this.imagen = imagen;
     }
 
     public Long getIdProduct() {
@@ -46,5 +49,13 @@ public class ProductResponseDTO {
 
     public String getCategoryName() {
         return categoryName;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 }

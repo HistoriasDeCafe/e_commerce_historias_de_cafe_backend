@@ -45,10 +45,23 @@ public class Product {
     @JoinColumn(name = "categorie_id", nullable = false)
     private Categories categories;
 
+    @Column
+    private String imagen;
+
+    private boolean active = true;
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     public Product() {
     }
 
-    public Product(Long id, String name, String description, Double price, Integer stock, Categories categories) {
+    public Product(Long id, String name, String description, Double price, Integer stock, Categories categories,String imagen ) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -103,5 +116,13 @@ public class Product {
 
     public void setCategories(Categories categories) {
         this.categories = categories;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 }

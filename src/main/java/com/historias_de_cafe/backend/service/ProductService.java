@@ -33,6 +33,7 @@ public class ProductService {
         product.setPrice(dto.getPrice());
         product.setStock(dto.getStock());
         product.setCategories(category);
+        product.setImagen(dto.getImagen());
 
         return toResponseDto(productRepository.save(product));
     }
@@ -46,7 +47,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public List<ProductResponseDTO> getAll() {
-        return productRepository.findAll()
+        return productRepository.findByActiveTrue()
                 .stream()
                 .map(this::toResponseDto)
                 .toList();
@@ -70,7 +71,8 @@ public class ProductService {
     public void delete(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
-        productRepository.delete(product);
+        product.setActive(false);
+        productRepository.save(product);
     }
 
     private ProductResponseDTO toResponseDto(Product product) {
@@ -82,7 +84,8 @@ public class ProductService {
                 product.getPrice(),
                 product.getStock(),
                 category != null ? category.getId().longValue() : null,
-                category != null ? category.getPresentation() : null
+                category != null ? category.getPresentation() : null,
+                product.getImagen()
         );
     }
 }
