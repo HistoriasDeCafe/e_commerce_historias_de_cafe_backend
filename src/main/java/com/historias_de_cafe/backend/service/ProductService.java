@@ -1,45 +1,88 @@
 package com.historias_de_cafe.backend.service;
 
+import com.historias_de_cafe.backend.DTO.ProductRequestDTO;
+import com.historias_de_cafe.backend.DTO.ProductResponseDTO;
+import com.historias_de_cafe.backend.model.Categories;
 import com.historias_de_cafe.backend.model.Product;
+import com.historias_de_cafe.backend.repository.CategoriesRepository;
 import com.historias_de_cafe.backend.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class ProductService {
+
     private final ProductRepository productRepository;
+    private final CategoriesRepository categoriesRepository;
 
-    @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoriesRepository categoriesRepository) {
         this.productRepository = productRepository;
+        this.categoriesRepository = categoriesRepository;
     }
 
-    public List<Product> findAllProducts() {
-        return productRepository.findAll();
+    public ProductResponseDTO create(ProductRequestDTO dto) {
+        Categories category = categoriesRepository.findById(dto.getCategoryId().intValue())
+                .orElseThrow(() -> new RuntimeException("Category not found with id: " + dto.getCategoryId()));
+
+        Product product = new Product();
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setPrice(dto.getPrice());
+        product.setStock(dto.getStock());
+        product.setCategories(category);
+
+        return toResponseDto(productRepository.save(product));
     }
 
-    public Product findById(Long id){
-        return productRepository.findById(id).orElse(null);
+    @Transactional(readOnly = true)
+    public ProductResponseDTO getById(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+        return toResponseDto(product);
     }
 
-    public Product save(Product product){
-        return productRepository.save(product);
+    @Transactional(readOnly = true)
+    public List<ProductResponseDTO> getAll() {
+        return productRepository.findAll()
+                .stream()
+                .map(this::toResponseDto)
+                .toList();
     }
 
-    public Product update(Long id, Product datos) {
-        Product existente = productRepository.findById(id).orElse(null);
-        if (existente == null) return null;
-        existente.setName(datos.getName());
-        existente.setDescription(datos.getDescription());
-        existente.setPrice(datos.getPrice());
-        existente.setStock(datos.getStock());
-        return productRepository.save(existente);
+    public ProductResponseDTO update(Long id, ProductRequestDTO dto) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+        Categories category = categoriesRepository.findById(dto.getCategoryId().intValue())
+                .orElseThrow(() -> new RuntimeException("Category not found with id: " + dto.getCategoryId()));
+
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setPrice(dto.getPrice());
+        product.setStock(dto.getStock());
+        product.setCategories(category);
+
+        return toResponseDto(productRepository.save(product));
     }
 
-    public void delete(Long id){
-        productRepository.deleteById(id);
+    public void delete(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+        productRepository.delete(product);
     }
 
+    private ProductResponseDTO toResponseDto(Product product) {
+        Categories category = product.getCategories();
+        return new ProductResponseDTO(
+                product.getId(),
+                product.getName(),
+                product.getDescription(),
+                product.getPrice(),
+                product.getStock(),
+                category != null ? category.getId().longValue() : null,
+                category != null ? category.getPresentation() : null
+        );
+    }
 }

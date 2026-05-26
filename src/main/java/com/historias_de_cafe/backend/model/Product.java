@@ -1,6 +1,14 @@
 package com.historias_de_cafe.backend.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -9,6 +17,7 @@ import jakarta.validation.constraints.Size;
 @Entity
 @Table(name = "products")
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_product")
@@ -19,9 +28,7 @@ public class Product {
     @Column(nullable = false)
     private String name;
 
-    @NotBlank(message = "El nombre no puede estar vacío")
-    @Size( min = 10, message = "La descripcion es demasiado corta")
-    @Column(nullable = false)
+    @Column
     private String description;
 
     @NotNull(message = "El precio es obligatorio")
@@ -34,20 +41,20 @@ public class Product {
     @Column(nullable = false)
     private Integer stock;
 
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categorie_id", nullable = false)
     private Categories categories;
 
     public Product() {
     }
 
-    public Product(Long id, String name, String description, Double price, Integer stock) {
+    public Product(Long id, String name, String description, Double price, Integer stock, Categories categories) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
+        this.categories = categories;
     }
 
     public Long getId() {
@@ -88,5 +95,13 @@ public class Product {
 
     public void setStock(Integer stock) {
         this.stock = stock;
+    }
+
+    public Categories getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Categories categories) {
+        this.categories = categories;
     }
 }

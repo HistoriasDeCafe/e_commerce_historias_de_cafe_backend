@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public class ProductRequestDTO {
+
     @NotBlank(message = "El nombre no puede estar vacío")
     private String name;
 
