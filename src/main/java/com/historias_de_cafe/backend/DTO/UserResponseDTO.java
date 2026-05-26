@@ -3,11 +3,9 @@ package com.historias_de_cafe.backend.DTO;
 import com.historias_de_cafe.backend.model.User;
 
 public class UserResponseDTO {
-    private String id;
+    private Long id;
     private String name;
     private String email;
-    private String password;
-    private String confirmPassword;
     private String role;
 
     public UserResponseDTO() {
@@ -15,17 +13,18 @@ public class UserResponseDTO {
 
     public static UserResponseDTO from(User user) {
         UserResponseDTO dto = new UserResponseDTO();
-        dto.confirmPassword = user.getPasswordHash();
+        dto.id = user.getId();
         dto.email = user.getEmail();
         dto.name = user.getName();
+        dto.role = user.getRole() != null ? user.getRole().toValue() : null;
         return dto;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -43,22 +42,6 @@ public class UserResponseDTO {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
     }
 
     public String getRole() {
