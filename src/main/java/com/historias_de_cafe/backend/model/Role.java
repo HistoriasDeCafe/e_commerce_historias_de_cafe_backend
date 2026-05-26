@@ -15,7 +15,7 @@ public enum Role {
 
         return switch (value.trim().toUpperCase()) {
             case "ADMIN" -> ADMIN;
-            case "CLIENT", "CLIENTE " -> CLIENT;
+            case "CLIENT", "CLIENTE" -> CLIENT;
             default -> throw new IllegalArgumentException("Rol no válido: " + value);
         };
     }
