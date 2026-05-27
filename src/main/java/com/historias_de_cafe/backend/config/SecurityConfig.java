@@ -32,16 +32,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/products/**", "/categories/**", "/users/**", "/orders/**", "/payments/**").hasAnyRole("CLIENT", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/products/**", "/categories/**", "/users/**", "/orders/**", "/payments/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/products/**", "/categories/**", "/users/**", "/orders/**", "/payments/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/products/**", "/categories/**", "/users/**", "/orders/**", "/payments/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/products/**", "/categories/**", "/users/**", "/orders/**", "/payments/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
-                )
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+//                        .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/products/**", "/categories/**", "/users/**", "/orders/**", "/payments/**").hasAnyRole("CLIENT", "ADMIN")
+//                        .requestMatchers(HttpMethod.POST, "/products/**", "/categories/**", "/users/**", "/orders/**", "/payments/**").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.PUT, "/products/**", "/categories/**", "/users/**", "/orders/**", "/payments/**").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.PATCH, "/products/**", "/categories/**", "/users/**", "/orders/**", "/payments/**").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.DELETE, "/products/**", "/categories/**", "/users/**", "/orders/**", "/payments/**").hasRole("ADMIN")
+//                        .anyRequest().authenticated()
+//                )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
