@@ -1,5 +1,4 @@
 package com.historias_de_cafe.backend.DTO;
-
 import com.historias_de_cafe.backend.model.User;
 
 public class UserResponseDTO {
