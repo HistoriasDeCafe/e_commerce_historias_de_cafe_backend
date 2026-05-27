@@ -16,7 +16,7 @@ public class CorsConfig {
                         .allowedOrigins(
                                 "http://localhost:5503",
                                 "http://127.0.0.1:5503",
-                                "https://e-commerce-historias-de-cafe.onrender.com"
+                                "https://historiasdecafe.github.io"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                         .allowedHeaders("*")
