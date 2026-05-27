@@ -47,7 +47,7 @@ public class AuthService {
         user.setName(request.getName().trim());
         user.setEmail(email);
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
-        user.setRole(Role.CLIENT);
+        user.setRole(Role.ADMIN);
         user.setCreationDate(LocalDateTime.now());
         user.setStateActive(true);
 
