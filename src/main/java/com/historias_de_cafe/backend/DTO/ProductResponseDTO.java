@@ -11,6 +11,8 @@ public class ProductResponseDTO {
     private String categoryName;
     private String imagen;
 
+    public ProductResponseDTO() {
+    }
 
     public ProductResponseDTO(Long idProduct, String name, String description, Double price, Integer stock, Long categoryId, String categoryName, String imagen) {
         this.idProduct = idProduct;
