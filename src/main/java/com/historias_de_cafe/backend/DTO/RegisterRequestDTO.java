@@ -16,6 +16,7 @@ public class RegisterRequestDTO {
     @NotBlank(message = "La contraseña no puede estar vacía")
     @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
     private String password;
+    private String role;
 
     public RegisterRequestDTO() {
     }
@@ -42,5 +43,13 @@ public class RegisterRequestDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
