@@ -20,7 +20,8 @@ public class CorsConfig {
                                 "http://localhost:5173",
                                 "http://127.0.0.1:5173",
                                 "https://historiasdecafe.github.io",
-                                "https://proyecto-historiasdecafe-frontend-vue-1.onrender.com"
+                                "https://proyecto-historiasdecafe-frontend-vue-1.onrender.com",
+                                "https://e-commerce-historias-de-cafe-frontend-r0cz.onrender.com"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                         .allowedHeaders("*")
