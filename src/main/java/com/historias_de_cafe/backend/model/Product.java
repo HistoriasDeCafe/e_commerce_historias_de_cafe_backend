@@ -2,6 +2,8 @@ package com.historias_de_cafe.backend.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -46,7 +48,17 @@ public class Product {
     private Categories categories;
 
     @Column
-    private String imagen;
+    private String image;
+
+    @NotBlank(message = "El origen del producto no puede estar vacío")
+    @Size(max = 100, message = "El origen es demasiado largo")
+    @Column(nullable = false)
+    private String origin;
+
+    @NotNull(message = "El tipo de tostado es obligatorio")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Roast roast;
 
     private boolean active = true;
 
@@ -61,13 +73,16 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String name, String description, Double price, Integer stock, Categories categories,String imagen ) {
+    public Product(Long id, String name, String description, Double price, Integer stock, Categories categories, String image, String origin, Roast roast) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
         this.categories = categories;
+        this.image = image;
+        this.origin = origin;
+        this.roast = roast;
     }
 
     public Long getId() {
@@ -118,11 +133,27 @@ public class Product {
         this.categories = categories;
     }
 
-    public String getImagen() {
-        return imagen;
+    public String getImage() {
+        return image;
     }
 
-    public void setImagen(String imagen) {
-        this.imagen = imagen;
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public Roast getRoast() {
+        return roast;
+    }
+
+    public void setRoast(Roast roast) {
+        this.roast = roast;
     }
 }

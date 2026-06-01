@@ -1,5 +1,6 @@
 package com.historias_de_cafe.backend.service;
 
+import com.historias_de_cafe.backend.model.Role;
 import com.historias_de_cafe.backend.model.User;
 import com.historias_de_cafe.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,8 @@ public class UserService {
         if (fields.containsKey("email")) existingUser.setEmail((String) fields.get("email"));
         if (fields.containsKey("passwordHash")) existingUser.setPasswordHash((String) fields.get("passwordHash"));
         if (fields.containsKey("stateActive")) existingUser.setStateActive((Boolean) fields.get("stateActive"));
+        if (fields.containsKey("role")) existingUser.setRole(Role.valueOf((String) fields.get("role")));
+
 
         return userRepository.save(existingUser);
     }

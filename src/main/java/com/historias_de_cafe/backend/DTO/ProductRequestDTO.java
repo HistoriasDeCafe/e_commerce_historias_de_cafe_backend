@@ -1,9 +1,11 @@
 package com.historias_de_cafe.backend.DTO;
 
+import com.historias_de_cafe.backend.model.Roast;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 public class ProductRequestDTO {
 
@@ -23,7 +25,14 @@ public class ProductRequestDTO {
     @NotNull(message = "El ID de la categoría es obligatorio")
     private Long categoryId;
 
-    private String imagen;
+    private String image;
+
+    @NotBlank(message = "El origen del producto no puede estar vacío")
+    @Size(max = 100, message = "El origen es demasiado largo")
+    private String origin;
+
+    @NotNull(message = "El tipo de tostado es obligatorio")
+    private Roast roast;
 
     public ProductRequestDTO() {
     }
@@ -68,11 +77,27 @@ public class ProductRequestDTO {
         this.categoryId = categoryId;
     }
 
-    public String getImagen() {
-        return imagen;
+    public String getImage() {
+        return image;
     }
 
-    public void setImagen(String imagen) {
-        this.imagen = imagen;
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public Roast getRoast() {
+        return roast;
+    }
+
+    public void setRoast(Roast roast) {
+        this.roast = roast;
     }
 }

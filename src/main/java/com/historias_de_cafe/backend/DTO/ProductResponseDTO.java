@@ -1,5 +1,7 @@
 package com.historias_de_cafe.backend.DTO;
 
+import com.historias_de_cafe.backend.model.Roast;
+
 public class ProductResponseDTO {
 
     private Long idProduct;
@@ -9,12 +11,14 @@ public class ProductResponseDTO {
     private Integer stock;
     private Long categoryId;
     private String categoryName;
-    private String imagen;
+    private String image;
+    private String origin;
+    private Roast roast;
 
     public ProductResponseDTO() {
     }
 
-    public ProductResponseDTO(Long idProduct, String name, String description, Double price, Integer stock, Long categoryId, String categoryName, String imagen) {
+    public ProductResponseDTO(Long idProduct, String name, String description, Double price, Integer stock, Long categoryId, String categoryName, String image, String origin, Roast roast) {
         this.idProduct = idProduct;
         this.name = name;
         this.description = description;
@@ -22,7 +26,9 @@ public class ProductResponseDTO {
         this.stock = stock;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
-        this.imagen = imagen;
+        this.image = image;
+        this.origin = origin;
+        this.roast = roast;
     }
 
     public Long getIdProduct() {
@@ -53,11 +59,27 @@ public class ProductResponseDTO {
         return categoryName;
     }
 
-    public String getImagen() {
-        return imagen;
+    public String getImage() {
+        return image;
     }
 
-    public void setImagen(String imagen) {
-        this.imagen = imagen;
+    public void setImagen(String image) {
+        this.image = image;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public Roast getRoast() {
+        return roast;
+    }
+
+    public void setRoast(Roast roast) {
+        this.roast = roast;
     }
 }

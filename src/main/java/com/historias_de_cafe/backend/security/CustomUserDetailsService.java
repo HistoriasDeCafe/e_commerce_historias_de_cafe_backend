@@ -23,6 +23,17 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
+        System.out.println("=== DEBUG JWT ===");
+        System.out.println("User found: " + user.getEmail());
+        System.out.println("User ID: " + user.getId());
+        System.out.println("Role object: " + user.getRole());
+        System.out.println("Role name: " + user.getRole().name());
+        System.out.println("Role toString: " + user.getRole().toString());
+
+        List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+        System.out.println("Authorities generated: " + authorities);
+        System.out.println("=== END DEBUG ===");
+
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
                 user.getPasswordHash(),
@@ -30,7 +41,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 true,
                 true,
                 true,
-                List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()))
+                authorities
         );
     }
 }

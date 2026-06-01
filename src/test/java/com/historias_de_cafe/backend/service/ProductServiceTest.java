@@ -4,6 +4,7 @@ import com.historias_de_cafe.backend.DTO.ProductRequestDTO;
 import com.historias_de_cafe.backend.DTO.ProductResponseDTO;
 import com.historias_de_cafe.backend.model.Categories;
 import com.historias_de_cafe.backend.model.Product;
+import com.historias_de_cafe.backend.model.Roast;
 import com.historias_de_cafe.backend.repository.CategoriesRepository;
 import com.historias_de_cafe.backend.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
@@ -54,7 +55,9 @@ class ProductServiceTest {
         assertEquals(35000.0, response.getPrice());
         assertEquals(1L, response.getCategoryId());
         assertEquals("Molido", response.getCategoryName());
-        assertEquals("image.jpg", response.getImagen());
+        assertEquals("image.jpg", response.getImage());
+        assertEquals("Colombia", response.getOrigin());
+        assertEquals(Roast.MEDIUM, response.getRoast());
     }
 
     @Test
@@ -120,7 +123,9 @@ class ProductServiceTest {
         request.setPrice(35000.0);
         request.setStock(12);
         request.setCategoryId(1L);
-        request.setImagen("image.jpg");
+        request.setImage("image.jpg");
+        request.setOrigin("Colombia");
+        request.setRoast(Roast.MEDIUM);
         return request;
     }
 
@@ -132,7 +137,9 @@ class ProductServiceTest {
         product.setPrice(35000.0);
         product.setStock(12);
         product.setCategories(category());
-        product.setImagen("image.jpg");
+        product.setImage("image.jpg");
+        product.setOrigin("Colombia");
+        product.setRoast(Roast.MEDIUM);
         return product;
     }
 
