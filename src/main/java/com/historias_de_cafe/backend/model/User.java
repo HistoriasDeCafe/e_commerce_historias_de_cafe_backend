@@ -15,6 +15,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_user")
     private Long id;
 
     @NotBlank(message = "El nombre no puede estar vacío")
@@ -32,7 +33,7 @@ public class User {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
-    @Enumerated (EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
